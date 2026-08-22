@@ -1,0 +1,101 @@
+/* RAKSHA Theme: Indigo & Gold */
+
+/* Page background */
+body {
+    background-color: #F5F3EE !important;
+}
+
+#content-wrapper {
+    background-color: #F5F3EE !important;
+}
+
+/* Sidebar gradient override */
+.sidebar.bg-gradient-primary {
+    background-color: #283593 !important;
+    background-image: linear-gradient(180deg, #283593 10%, #1a237e 100%) !important;
+}
+
+.sidebar .nav-item .nav-link i {
+    color: rgba(255, 255, 255, 0.8);
+    margin-right: 0.5rem;
+}
+
+.sidebar .nav-item .nav-link span {
+    font-weight: bold;
+}
+
+.sidebar .nav-item .nav-link {
+    padding-left: 1.5rem;
+}
+
+.sidebar .nav-item .nav-link:hover {
+    background-color: rgba(249, 168, 37, 0.15);
+}
+
+.sidebar-brand-text {
+    color: #F9A825 !important;
+    font-weight: bold !important;
+}
+
+/* Top navbar */
+.navbar.bg-white {
+    background-color: #FFFFFF !important;
+    border-bottom: 3px solid #F9A825;
+    box-shadow: 0 2px 4px rgba(40, 53, 147, 0.1);
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #283593 !important;
+    border-color: #283593 !important;
+}
+
+.btn-primary:hover {
+    background-color: #1a237e !important;
+    border-color: #1a237e !important;
+}
+
+/* Cards border colors */
+.border-left-primary {
+    border-left-color: #283593 !important;
+}
+
+.border-left-danger {
+    border-left-color: #C0392B !important;
+}
+
+.border-left-warning {
+    border-left-color: #F9A825 !important;
+}
+
+.border-left-success {
+    border-left-color: #2E7D32 !important;
+}
+
+.border-left-info {
+    border-left-color: #0277BD !important;
+}
+
+/* Text colors */
+.text-primary {
+    color: #283593 !important;
+}
+
+.text-warning {
+    color: #F9A825 !important;
+}
+
+/* Page heading */
+.h4.text-gray-800 {
+    color: #283593 !important;
+}
+
+/* Sidebar dividers */
+.sidebar hr.sidebar-divider {
+    border-top-color: rgba(249, 168, 37, 0.3);
+}
+
+/* Scrollbar for sidebar */
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: #F9A825;
+}

@@ -1,0 +1,246 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}RAKSHA{% endblock title %}
+
+{% block css %}
+    <style>
+        #map {
+            width: 100%;
+            min-height: 565px;
+        }
+        #mbb {
+            display: none;
+        }
+        .card-body {
+            padding: 0 0.5rem;
+        }
+        .msgbtn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+        }
+    </style>
+{% endblock css %}
+
+{% block pagetitle %}Relief{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-xl-2 col-lg-2 p-0">
+            <div class="col-xl-12 col-md-12 mb-4">
+                <div class="card border-left-danger shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="font-weight-bold text-danger text-uppercase mb-1">Time</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="time">00:00:00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-12 col-md-12 mb-4 mt-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="font-weight-bold text-primary text-uppercase mb-1">Vehicle Capacity</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="vc">--</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-12 col-md-12 mb-4 mt-4">
+                <div class="card border-left-secondary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="font-weight-bold text-secondary text-uppercase mb-1">No. of Vehicles</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="n">--</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-12 col-md-12 mb-4 mt-4">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="font-weight-bold text-info text-uppercase mb-1">Max. Occupancy</div>
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col-auto">
+                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="occ">--</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-12 col-md-12 mb-4 mt-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="font-weight-bold text-warning text-uppercase mb-1">Kms per trip</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="kpt">--</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-12 col-md-12 mb-4 mt-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="font-weight-bold text-success text-uppercase mb-1">Max. Walking Distance</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="mw">--</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-10 col-lg-10">
+            <div class="card shadow mb-4">
+                <div id="map" class="card-body">
+                    <br><br><br><br><br><br><br><br><br><br>
+                    <div id="textdisplay" style="font-weight: 400; font-size: 2rem; text-align: center"></div>
+                </div>
+                <a id="mbb" class="btn btn-primary msgbtn" style="border-radius: 50px; font-size: 1.35rem; width: 180px; height: 3.5rem; color: #fff; text-align: left; background-color: #2e59d9 !important;">
+                     <span style="position:relative; top: 5px">Send Relief</span>
+                 </a>
+                <a id="mbs" class="btn btn-primary btn-circle btn-lg msgbtn shadow" style="color: #fff;">
+                    <i class="fas fa-paper-plane"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block modals %}
+{% endblock %}
+
+{% block script %}
+    <script>
+        $("#mbs").hover(function() {
+            $("#mbb").css("display", "block");
+        }, function() {
+            $("#mbb").css("display", "none");
+        });
+    </script>
+    <script>
+        var map, counter = 0, timer;
+
+        function updateParameters(par) {
+            for (var i = 0; i < par.length; i++) {
+                var d = par[i];
+                $("#"+d[0]).html(d[1]);
+            }
+        }
+
+        function convertSecToTimeString(secs) {
+            var sec = secs * 2;
+            var hr = Math.floor(sec / 3600);
+            var min = Math.floor((sec - hr * 3600) / 60);
+            sec = Math.round(sec - min * 60 - hr * 3600);
+            var hh = hr < 10 ? "0" + hr : hr;
+            var mm = min < 10 ? "0" + min : min;
+            var ss = sec < 10 ? "0" + sec : sec;
+            return hh + ":" + mm + ":" + ss;
+        }
+
+        function initMap(data) {
+            updateParameters(data.par);
+
+            if (map) { map.remove(); }
+            map = L.map('map').setView([12.97, 77.60], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            var bounds = [];
+            var colour = data.colours;
+            var bus_stops = data.busstops;
+            var routes = data.routes;
+
+            // Depot marker
+            var depotIcon = L.icon({ iconUrl: '/static/img/office.png', iconSize: [25, 25], iconAnchor: [12, 12] });
+            var depotLatLng = [data.depot.coordinates[1], data.depot.coordinates[0]];
+            L.marker(depotLatLng, {icon: depotIcon, title: data.depot.name}).addTo(map).bindPopup("<b>" + data.depot.name + "</b>");
+            bounds.push(depotLatLng);
+
+            // Draw routes as polylines connecting depot -> bus_stops -> depot
+            for (var r = 0; r < routes.length; r++) {
+                var routePoints = [depotLatLng];
+                var bss = routes[r].bus_stops;
+                for (var b = 0; b < bss.length; b++) {
+                    var bsLatLng = [bss[b].coordinates[1], bss[b].coordinates[0]];
+                    routePoints.push(bsLatLng);
+                    bounds.push(bsLatLng);
+                }
+                routePoints.push(depotLatLng); // return to depot
+                L.polyline(routePoints, {color: colour[r], weight: 4, opacity: 0.8}).addTo(map);
+            }
+
+            // Bus stop markers
+            var bsIcon = L.icon({ iconUrl: '/static/img/bs.png', iconSize: [23, 30], iconAnchor: [11, 30] });
+            for (var ii = 0; ii < bus_stops.length; ii++) {
+                var bsLL = [bus_stops[ii].coordinates[1], bus_stops[ii].coordinates[0]];
+                L.marker(bsLL, {icon: bsIcon}).addTo(map).bindPopup("<b>" + bus_stops[ii].name + "</b>");
+                bounds.push(bsLL);
+            }
+
+            // Customer points (if available)
+            if (data.customerpoints) {
+                for (var c = 0; c < data.customerpoints.length; c++) {
+                    var cp = data.customerpoints[c];
+                    var cpLL = [cp.coordinates[1], cp.coordinates[0]];
+                    var routeColor = colour[cp.route] || '#333';
+                    L.circleMarker(cpLL, {radius: 5, color: routeColor, fillColor: routeColor, fillOpacity: 0.8}).addTo(map).bindPopup(cp.name);
+                    bounds.push(cpLL);
+                }
+            }
+
+            // Fit map to bounds
+            if (bounds.length > 0) { map.fitBounds(bounds, {padding: [20, 20]}); }
+
+            // Timer animation
+            counter = 0;
+            if (timer) clearInterval(timer);
+            timer = setInterval(function() {
+                counter++;
+                document.getElementById("time").innerHTML = convertSecToTimeString(counter);
+            }, 500);
+        }
+    </script>
+    <script>
+        $("#mbs").click(function() {
+            $(this).css("display", "none");
+            $("#textdisplay").html("PLEASE WAIT, FINDING ROUTES ...");
+            $.ajax({
+                url: "{% url 'routesolve' instance %}",
+                type: 'GET',
+                data: {'demo': true},
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    if (data["status"] == "OK") {
+                        $("#map").html("");
+                        initMap(data);
+                    } else if (data["status"] == "c") {
+                        $("#textdisplay").html("FEW CONSTRAINTS MISSING");
+                    } else if (data["status"] == "se") {
+                        $("#textdisplay").html("SOMETHING WENT WRONG :(<br>TRY AGAIN");
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock script %}
+
