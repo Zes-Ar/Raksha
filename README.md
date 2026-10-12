@@ -618,14 +618,3 @@ python webstreaming.py --input videos/Assam_floods.mp4 --ip 127.0.0.1 --port 500
 - **Emergency Service Optimization**: Eliminates chaotic, uncoordinated vehicle deployment, ensuring rescue fleets prioritize high-density distress pockets with optimized fuel and road conditions.
 
 ---
-
-## 📜 License
-
-This project is open-source and licensed under the **MIT License**.
-
----
-
-<p align="center">
-  <b>Developed with passion for AI-driven humanitarian relief and disaster resilience.</b><br>
-  <sub>Contribute, star the repository, or fork to build for your Smart City!</sub>
-</p>
